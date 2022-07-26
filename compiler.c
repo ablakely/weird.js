@@ -225,7 +225,7 @@ void init_characters()
   initChar(' ', "({}+[])[?]", tmp);
 
   tmp.numbers[0] = 0;
-  initChar('f', "(!{}+[])[0]", tmp);
+  initChar('f', "(!{}+[])[+[]]", tmp);
 
   tmp.numbers[0] = 1;
   initChar('a', "(+{}+[])[?]", tmp);
