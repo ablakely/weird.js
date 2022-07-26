@@ -217,16 +217,15 @@ void init_characters()
     tmp.strings[i] = calloc(35, sizeof(char));
   }
 
+  tmp.slen = 0;
+  tmp.len = 0;
+  initChar('f', "(!{}+[])[+[]]", tmp);
 
   tmp.len = 1;
-  tmp.slen = 0;
 
   tmp.numbers[0] = 7;
   initChar(' ', "({}+[])[?]", tmp);
-
-  tmp.numbers[0] = 0;
-  initChar('f', "(!{}+[])[+[]]", tmp);
-
+ 
   tmp.numbers[0] = 1;
   initChar('a', "(+{}+[])[?]", tmp);
   initChar('o', "({}+[])[?]", tmp);
