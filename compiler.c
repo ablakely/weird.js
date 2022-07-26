@@ -1,5 +1,5 @@
 /*
- * wtf.js - Javascript to WTF! compiler
+ * wtf.js - Javascript to WTF! (JSFuck) compiler
  *
  * Written by Aaron Blakely <aaron@ephasic.org>
  * Copyright (C) 2022 Ephasic Software (https://ephasic.org/wtf.js)
@@ -39,7 +39,6 @@ typedef struct numberArgs
 void strlcpy(char *to, const char *from, int len)
 {
     memccpy(to, from, '\0', len);
-    //to[len-1] = '\0';
 }
 
 int charIndex(char c)
@@ -423,6 +422,10 @@ int main(int argc, char *argv[])
         if (line[i] != '\n')
         {
           sprintf(buf, "%s%c", buf, line[i]);
+        }
+        else
+        {
+          sprintf(buf, "%s ", buf);
         }
       }
     }
