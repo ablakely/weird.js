@@ -1,6 +1,10 @@
 # wtf.js
 wtf.js is a [JSFuck](https://en.wikipedia.org/wiki/JSFuck) compiler written in C.
 
+## Building
+
+    make
+
 ## Usage
 
     ./wtf in.js out.js
