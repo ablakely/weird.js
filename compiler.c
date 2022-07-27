@@ -397,7 +397,7 @@ int main(int argc, char *argv[])
   char *buf = NULL;
   size_t len = 0;
   ssize_t read;
-  int i, idx, bufsize;
+  int i, idx, bufsize, commentmode = 0;
 
   init_characters();
 
@@ -418,13 +418,39 @@ int main(int argc, char *argv[])
     {
       for (i = 0; i < strlen(line)+1; i++)
       {
-        if (line[i] != '\n')
+        if (line[i] == '/' && line[i+1] == '/')
         {
-          sprintf(buf, "%s%c", buf, line[i]);
+          while (line[i] != '\n')
+            i++;
+
+          continue;
+        }
+        else if (line[i] == '/' && line[i+1] == '*')
+        {
+          commentmode = 1;
+
+          i++;
+          continue;
+        }
+        else if (line[i] == '*' && line[i+1] == '/')
+        {
+          commentmode = 0;
+
+          i++;
+          continue;
         }
         else
         {
-          sprintf(buf, "%s ", buf);
+          if (line[i] != '\n')
+          {
+            if (commentmode != 1)
+              sprintf(buf, "%s%c", buf, line[i]);
+          }
+          else
+          {
+            if (commentmode != 1)
+              sprintf(buf, "%s ", buf);
+          }
         }
       }
     }
