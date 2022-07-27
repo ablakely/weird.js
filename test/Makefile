@@ -1,4 +1,4 @@
 WTF=../wtf
 
 all:
-	$(WTF) ./test.js ./out.js
+	$(WTF) -m ./test.js ./out.js

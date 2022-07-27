@@ -344,7 +344,7 @@ char *fromString(char *str)
   return buf;
 }
 
-char *compile(char *code)
+char *compile(char *code, int evalWrapMode)
 {
   int idx, bufsize = 16;
   char *compiled;
@@ -355,14 +355,23 @@ char *compile(char *code)
 
   compiled = calloc(bufsize, sizeof(char));
 
-  sprintf(compiled, "(()=>{})[%s](%s)()", strings[idx].code, fromString(code));
+  if (evalWrapMode == 1)
+  {
+    sprintf(compiled, "(()=>{})[%s](%s)()", strings[idx].code, fromString(code));
+  }
+  else
+  {
+    compiled = fromString(code);
+  }
+
   return compiled;
 }
 
 void usage()
 {
-  printf("usage: wtf [IN File] [OUT FILE]\n");
-  printf("JSF*ck compiler\n");
+  printf("usage: wtf [OPTIONS]... [IN File] [OUT FILE]\n");
+  printf("JSF*ck compiler\n\n");
+  printf("    -m - Disables wrapping final code in an eval() statement. (Used for compiling node.js modules)\n");
   printf("\nwtf.js - Written by Aaron Blakely\nCopyright (C) 2022 Ephasic Software\n");
   printf("  https://ephasic.org/wtf.js\n");
   exit(-1);
@@ -389,7 +398,7 @@ int getFileSize(char *file)
   return bufsize;
 }
 
-int main(int argc, char *argv[])
+void compileFile(char *in, char *out, int evalWrapMode)
 {
   FILE *fp, *wfp;
   char *line = NULL;
@@ -399,73 +408,104 @@ int main(int argc, char *argv[])
   ssize_t read;
   int i, idx, bufsize, commentmode = 0;
 
-  init_characters();
+  fp = fopen(in, "r");
+  if (fp == NULL)
+    exit(EXIT_FAILURE);
 
-  if (argc > 2)
+  wfp = fopen(out, "w");
+  if (wfp == NULL)
+    exit(EXIT_FAILURE);
+
+  bufsize = getFileSize(in);
+  buf = calloc(bufsize, sizeof(char));
+
+  while ((read = getline(&line, &len, fp)) != -1)
   {
-    fp = fopen(argv[1], "r");
-    if (fp == NULL)
-      exit(EXIT_FAILURE);
-
-    wfp = fopen(argv[2], "w");
-    if (wfp == NULL)
-      exit(EXIT_FAILURE);
-
-    bufsize = getFileSize(argv[1]);
-    buf = calloc(bufsize, sizeof(char));
-
-    while ((read = getline(&line, &len, fp)) != -1)
+    for (i = 0; i < strlen(line)+1; i++)
     {
-      for (i = 0; i < strlen(line)+1; i++)
+      // Ignore shebangs 
+      if (line[i] == '#' && line[i+1] == '!')
       {
-        if (line[i] == '/' && line[i+1] == '/')
-        {
-          while (line[i] != '\n')
-            i++;
-
-          continue;
-        }
-        else if (line[i] == '/' && line[i+1] == '*')
-        {
-          commentmode = 1;
-
+        while (line[i] != '\n')
           i++;
-          continue;
-        }
-        else if (line[i] == '*' && line[i+1] == '/')
-        {
-          commentmode = 0;
 
+        continue;
+      }
+
+      // Ignore signle line comments
+      if (line[i] == '/' && line[i+1] == '/')
+      {
+        while (line[i] != '\n')
           i++;
-          continue;
+
+        continue;
+      }
+
+      // Ignore multiline comments
+      else if (line[i] == '/' && line[i+1] == '*')
+      {
+        commentmode = 1;
+
+        i++;
+        continue;
+      }
+      else if (line[i] == '*' && line[i+1] == '/')
+      {
+        commentmode = 0;
+
+        i++;
+        continue;
+      }
+      else
+      {
+        if (line[i] != '\n')
+        {
+          if (commentmode != 1)
+            sprintf(buf, "%s%c", buf, line[i]);
         }
         else
         {
-          if (line[i] != '\n')
-          {
-            if (commentmode != 1)
-              sprintf(buf, "%s%c", buf, line[i]);
-          }
-          else
-          {
-            if (commentmode != 1)
-              sprintf(buf, "%s ", buf);
-          }
+          if (commentmode != 1)
+            sprintf(buf, "%s ", buf);
         }
       }
     }
+  }
 
-    fputs(compile(buf), wfp);
+  fputs(compile(buf, evalWrapMode), wfp);
 
-    fclose(fp);
-    fclose(wfp);
+  fclose(fp);
+  fclose(wfp);
 
-    if (line)
-      free(line);
+  if (line)
+    free(line);
 
-    if (compiled)
-      free(compiled);
-  
+  if (compiled)
+    free(compiled);
+}
+
+int main(int argc, char *argv[])
+{
+  int evalWrapMode = 1;
+  int argoffset = 0;
+  init_characters();
+
+  if (argc == 3)
+  {
+    compileFile(argv[1], argv[2], evalWrapMode);
+  }
+  else if (argc > 3)
+  {
+    for (int i = 1; i < argc; i++)
+    {
+      if (strcmp(argv[i], "-m") == 0)
+      {
+        evalWrapMode = 0;
+        argoffset++;
+      }
+    }
+
+    compileFile(argv[argoffset+1], argv[argoffset+2], evalWrapMode);
   }
   else
   {
