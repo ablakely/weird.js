@@ -167,6 +167,8 @@ void initChar(char c, char *str, numberArgs args)
   strlcpy(chars[charCount].code, buf, (int)strlen(buf)+1);
   chars[charCount].size = (int)strlen(buf)+1;
   charCount++;
+
+  free(buf);
 }
 
 void initString(char *str)
@@ -206,6 +208,8 @@ void initString(char *str)
   strlcpy(strings[stringCount].code, buf, (int)strlen(buf)+1);
   strings[stringCount].size = (int)strlen(buf)+1;
   stringCount++;
+
+  free(buf);
 }
 
 void init_characters()
@@ -482,6 +486,8 @@ void compileFile(char *in, char *out, int evalWrapMode)
 
   if (compiled)
     free(compiled);
+
+  free(buf);
 }
 
 int main(int argc, char *argv[])
