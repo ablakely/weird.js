@@ -1,5 +1,5 @@
-# wtf.js
-wtf.js is a [JSFuck](https://en.wikipedia.org/wiki/JSFuck) compiler written in C.
+# weird.js
+weird.js is a javascript obfuscation compiler written in C, it produces working JavaScript using characters `[()]!+-/*=>`.
 
 ## Building
 
@@ -7,12 +7,12 @@ wtf.js is a [JSFuck](https://en.wikipedia.org/wiki/JSFuck) compiler written in C
 
 ## Usage
 
-    ./wtf [OPTIONS] in.js out.js
+    ./weird [OPTIONS] in.js out.js
     
     Use the `-m` flag to disable wrapping the final code in an eval statement.
 
 ## How does this work?
-wtf.js uses type coercion to produce working, yet unreadable javascript.
+weird.js uses type coercion to produce working, yet unreadable javascript.
 
 I recommed checking out [this video by Low Level Javascript](https://www.youtube.com/watch?v=sRWE5tnaxlI) if you're interested in learning more.
 
@@ -24,4 +24,4 @@ To use `require` you must define it, like so:
 
 
 ## Support
-Support for wtf.js is available on [IRC](https://webchat.ephasic.org/?join=ephasic)
+Support for weird.js is available on [IRC](https://webchat.ephasic.org/?join=ephasic)
