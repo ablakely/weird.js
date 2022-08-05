@@ -1,4 +1,4 @@
-# wtf.js makefile
+# weird.js makefile
 
 CC = gcc
 
