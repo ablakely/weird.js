@@ -3,7 +3,7 @@
 CC = gcc
 
 all:
-	$(CC) -g3 -o wtf compiler.c
+	$(CC) -g3 -o weird compiler.c
 
 clean:
-	rm wtf.js
+	rm weird
