@@ -1,5 +1,5 @@
 /*
- * wtf.js - Javascript to WTF! (JSFuck) compiler
+ * weird.js - Javascript obfuscation compiler
  *
  * Written by Aaron Blakely <aaron@ephasic.org>
  * Copyright (C) 2022 Ephasic Software (https://ephasic.org/wtf.js)
@@ -373,11 +373,11 @@ char *compile(char *code, int evalWrapMode)
 
 void usage()
 {
-  printf("usage: wtf [OPTIONS]... [IN File] [OUT FILE]\n");
-  printf("JSF*ck compiler\n\n");
+  printf("usage: weird [OPTIONS]... [IN File] [OUT FILE]\n");
+  printf("JavaScript obfuscation compiler\n\n");
   printf("    -m - Disables wrapping final code in an eval() statement. (Used for compiling node.js modules)\n");
-  printf("\nwtf.js - Written by Aaron Blakely\nCopyright (C) 2022 Ephasic Software\n");
-  printf("  https://ephasic.org/wtf.js\n");
+  printf("\nweird.js - Written by Aaron Blakely\nCopyright (C) 2022 Ephasic Software\n");
+  printf("  https://github.com/ablakely/weird.js\n");
   exit(-1);
 }
 
