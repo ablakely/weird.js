@@ -1,4 +1,4 @@
-WTF=../wtf
+WEIRD=../weird
 
 all:
-	$(WTF) ./test.js ./out.js
+	$(WEIRD) ./test.js ./out.js
